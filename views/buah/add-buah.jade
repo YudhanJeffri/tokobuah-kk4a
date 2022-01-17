@@ -14,7 +14,7 @@ block content
         .box
             .box-header.with-border
                 h3.box-title
-                    | Buah
+                    | Customer
                 .box-tools.pull-right
                     button(type='button' data-widget='collapse' data-toggle='tooltip' title='collapse').btn.btn-box-tool
                         i.fa.fa-minus
@@ -22,6 +22,7 @@ block content
             .box-body
                 form(role='form' method='post' action='/buah/add')
                     .row
+
                         .col-xs-6
                             .box-body
                                 - if (messages.msg_error) 
@@ -34,20 +35,20 @@ block content
                                         | !{messages.msg_error}
                                 .form-group
                                     label
-                                        | Nama Buah
-                                    input(type='text' name='#{nama}' placeholder='Enter Nama Buah').form-control
+                                        | Name
+                                    input(type='text' value='#{name}' name='name' placeholder='Enter Name', autofocus).form-control
                                 .form-group
                                     label
-                                        | Harga
-                                    input(type='text' name='#{harga}' placeholder='Enter Harga').form-control
+                                        | harga
+                                    input(type='text' name='harga' placeholder='Enter harga').form-control
                                 .form-group
                                     label
-                                        | Stok
-                                    input(type='text' name='#{stok}' placeholder='Enter Stok').form-control
+                                        | stok
+                                    input(type='text' value='#{stok}' name='stok' placeholder='Enter harga').form-control
                                 .form-group
                                     label
-                                        | Deskripsi
-                                    input(type='text' name='#{deskripsi}' placeholder='Enter Deskripsi').form-control
+                                        | deskripsi
+                                    input(type='text' name='deskripsi' placeholder='Enter deskripsi').form-control
                             .box-footer
                                 button(type='submit').btn.btn-primary
                                     | Submit
