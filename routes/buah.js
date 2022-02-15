@@ -167,4 +167,127 @@ router.get("/add", function (req, res, next) {
   });
 });
 
+
+router.post("/pesan/add", function (req, res, next) {
+  req.assert("id_customer", "Please fill the name").notEmpty();
+  var errors = req.validationErrors();
+  if (!errors) {
+    v_id_customer = req.sanitize("id_customer").escape().trim();
+    v_qty = req.sanitize("qty").escape().trim();
+    v_id_buah = req.sanitize("id_buah").escape().trim();
+    tgl_pesan = req.sanitize("tgl_pesan").escape();
+
+    var buah = {
+      id_customer: v_id_customer,
+      id_buah: v_id_buah,
+      qty: v_qty,
+      tgl_pesan: tgl_pesan,
+    };
+
+    var insert_sql = "INSERT INTO pesanan SET ?";
+
+    req.getConnection(function (err, connection) {
+      var query = connection.query(insert_sql, buah, function (err, result) {
+        if (err) {
+          var errors_detail = ("Error Insert : %s ", err);
+          req.flash("msg_error", errors_detail);
+          res.render("buah/pesan", {
+            id_customer: req.param("id_customer"),
+            qty: req.param("qty"),
+            id_buah: req.param("id_buah"),
+            tgl_pesan: req.param("tgl_pesan"),
+          });
+        } else {
+          req.flash("msg_info", "Create buah success");
+          res.redirect("/buah");
+        }
+      });
+    });
+  } else {
+    console.log(errors);
+    errors_detail = "<p>Sory there are error</p><ul>";
+    for (i in errors) {
+      error = errors[i];
+      errors_detail += "<li>" + error.msg + "</li>";
+    }
+    errors_detail += "</ul>";
+    req.flash("msg_error", errors_detail);
+    res.render("buah/pesan", {
+      id_customer: req.param("id_customer"),
+      id_buah: req.param("id_buah"),
+    });
+  }
+});
+
+router.get("/pesan/(:id)", function (req, res, next) {
+  req.getConnection(function (err, connection) {
+    var query = connection.query(
+      "SELECT * FROM buah where id=" + req.params.id,
+      function (err, databuah) {
+        if (err) {
+          var errornya = ("Error Selecting : %s ", err);
+          req.flash("msg_error", errors_detail);
+          res.redirect("/buah");
+        } else {
+          if (databuah.length <= 0) {
+            req.flash("msg_error", "buah can't be find!");
+            res.redirect("/buah");
+          } else {
+            console.log(databuah);
+            req.getConnection(function (err, connection) {
+              var query = connection.query(
+                "SELECT * FROM customer", 
+                function (err, rows) {
+                  if (err) {
+                    var errornya = ("Error Selecting : %s ", err);
+                    req.flash("msg_error", errors_detail);
+                    res.redirect("/pesan");
+                  } else {
+                    if (rows.length <= 0) {
+                      req.flash("msg_error", "customer can't be find!");
+                      res.redirect("/pesan");
+                    } else {
+                      console.log(rows);
+                      res.render("buah/pesan", { title: "Pesan ", data: rows, databuah: databuah[0],
+                      id_customer: "",
+                      qty: "",
+                      tgl_pesan: "",
+                      id_buah: "", },
+                      );
+                    }
+                  }
+                }
+              );
+            });
+          }
+        }
+      }
+    );
+  });
+  
+});
+
+
+router.delete("/dlt/(:id_pesanan)", function (req, res, next) {
+  req.getConnection(function (err, connection) {
+    var buah = {
+      id_pesanan: req.params.id_pesanan,
+    };
+
+    var delete_sql = "delete from pesanan where ?";
+    req.getConnection(function (err, connection) {
+      var query = connection.query(delete_sql, buah, function (err, result) {
+        if (err) {
+          var errors_detail = ("Error Delete : %s ", err);
+          req.flash("msg_error", errors_detail);
+          res.redirect("/pesanan");
+        } else {
+          req.flash("msg_info", "Delete pesanan Success");
+          res.redirect("/pesanan");
+        }
+      });
+    });
+  });
+});
+
 module.exports = router;

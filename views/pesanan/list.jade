@@ -14,7 +14,7 @@ block content
         .box
             .box-header.with-border
                 h3.box-title
-                    | Buah
+                    | Pesanan
                 .box-tools.pull-right
                     button(type='button' data-widget='collapse' data-toggle='tooltip' title='collapse').btn.btn-box-tool
                         i.fa.fa-minus
@@ -44,13 +44,13 @@ block content
                             th
                                 | No
                             th
-                                | Nama Buah
+                                | Id Customer
                             th
-                                | Harga Buah
+                                | Id Buah
                             th
-                                | Stok
+                                | Quantity
                             th
-                                | Deskripsi
+                                | Tanggal Pesan
                             th
                                 | Action
                             if messages.msg_error
@@ -59,21 +59,17 @@ block content
                                 for row, index in data 
                                     tr
                                         td #{index+1}
-                                        td #{row.name}
-                                        td #{row.harga}
-                                        td #{row.stok}
-                                        td #{row.deskripsi}
+                                        td #{row.id_customer}
+                                        td #{row.id_buah}
+                                        td #{row.qty}
+                                        td #{row.tgl_pesan}
                                         td
                                             div(style='display:inline-block')
-                                                a(href='/buah/edit/#{row.id}').btn.btn-sm.btn-primary
+                                                a(href='/buah/edit/pesanan/#{row.id_pesanan}').btn.btn-sm.btn-primary
                                                     i.fa.fa-edit
                                             | 
                                             div(style='display:inline-block')
-                                                a(href='/buah/pesan/#{row.id}').btn.btn-sm.btn-primary
-                                                    i.fa.fa-book
-                                            | 
-                                            div(style='display:inline-block')
-                                                form(method='post' action='/buah/delete/#{row.id}')
+                                                form(method='post' action='/buah/dlt/#{row.id_pesanan}')
                                                     input(type="hidden" name="_method" value="DELETE")
                                                     button.btn.btn-sm.btn-danger(type='submit')
                                                         i.fa.fa-remove
