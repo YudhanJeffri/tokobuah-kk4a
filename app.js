@@ -10,6 +10,7 @@ var users = require("./routes/users");
 var buah = require("./routes/buah");
 var pesanan = require("./routes/pesanan")
 var customers = require("./routes/customers");
+var pembayaran = require("./routes/pembayaran");
 var expressValidator = require("express-validator");
 var methodOverride = require("method-override");
 var connection = require("express-myconnection");
@@ -21,6 +22,8 @@ app.set("view engine", "jade");
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({ secret: "telkom" }));
@@ -59,6 +62,7 @@ app.use("/customers", customers);
 app.use("/buah", buah);
 app.use("/users", users);
 app.use("/pesanan", pesanan)
+app.use("/pembayaran", pembayaran)
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   var err = new Error("Not Found");

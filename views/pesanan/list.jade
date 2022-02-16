@@ -2,7 +2,7 @@ extends ../layout/base
 block content 
     section.content-header 
         h1 
-            | Blank Page
+            | Pesan Buah Page
             small it all starts here
         ol.breadcrumb 
             li 
@@ -35,9 +35,6 @@ block content
                             i.icon.fa.fa-ban
                             | Alert!
                         | !{messages.msg_error}
-                a(href='buah/add').pull-left.btn.btn-primary
-                    i.fa.fa-plus 
-                    |  Add Buah
                 .data-table
                     table.table.table-bordered
                         tr
@@ -67,6 +64,10 @@ block content
                                             div(style='display:inline-block')
                                                 a(href='/buah/edit/pesanan/#{row.id_pesanan}').btn.btn-sm.btn-primary
                                                     i.fa.fa-edit
+                                            | 
+                                            div(style='display:inline-block')
+                                                a(href='/buah/pembayaran/pesanan/#{row.id_pesanan}').btn.btn-sm.btn-primary
+                                                    i.fa.fa-credit-card-alt
                                             | 
                                             div(style='display:inline-block')
                                                 form(method='post' action='/buah/dlt/#{row.id_pesanan}')

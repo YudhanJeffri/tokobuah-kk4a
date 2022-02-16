@@ -172,16 +172,16 @@ router.post("/pesan/add", function (req, res, next) {
   req.assert("id_customer", "Please fill the name").notEmpty();
   var errors = req.validationErrors();
   if (!errors) {
-    v_id_customer = req.sanitize("id_customer").escape().trim();
-    v_qty = req.sanitize("qty").escape().trim();
-    v_id_buah = req.sanitize("id_buah").escape().trim();
-    tgl_pesan = req.sanitize("tgl_pesan").escape();
+    v_id_customer = req?.sanitize("id_customer")?.escape()?.trim();
+    v_id_buah = req?.sanitize("id_buah")?.escape()?.trim();
+    v_qty = req?.sanitize("qty")?.escape()?.trim();
+    v_tgl_pesan = req?.sanitize("tgl_pesan")?.escape();
 
     var buah = {
       id_customer: v_id_customer,
       id_buah: v_id_buah,
       qty: v_qty,
-      tgl_pesan: tgl_pesan,
+      tgl_pesan: v_tgl_pesan,
     };
 
     var insert_sql = "INSERT INTO pesanan SET ?";
@@ -193,8 +193,8 @@ router.post("/pesan/add", function (req, res, next) {
           req.flash("msg_error", errors_detail);
           res.render("buah/pesan", {
             id_customer: req.param("id_customer"),
-            qty: req.param("qty"),
             id_buah: req.param("id_buah"),
+            qty: req.param("qty"),
             tgl_pesan: req.param("tgl_pesan"),
           });
         } else {
@@ -217,6 +217,118 @@ router.post("/pesan/add", function (req, res, next) {
       id_buah: req.param("id_buah"),
     });
   }
+});
+
+router.post("/pembayaran/add", function (req, res, next) {
+  req.assert("id_pesanan", "Please fill the name").notEmpty();
+  var errors = req.validationErrors();
+  if (!errors) {
+    v_id_pesanan = req?.sanitize("id_pesanan")?.escape()?.trim();
+    v_tgl_bayar = req?.sanitize("tgl_bayar")?.escape()?.trim();
+
+    var buah = {
+      id_pesanan: v_id_pesanan,
+      tgl_bayar: v_tgl_bayar,
+    };
+
+    var insert_sql = "INSERT INTO pembayaran SET ?";
+
+    req.getConnection(function (err, connection) {
+      var query = connection.query(insert_sql, buah, function (err, result) {
+        if (err) {
+          var errors_detail = ("Error Insert : %s ", err);
+          req.flash("msg_error", errors_detail);
+          res.render("buah/pembayaran", {
+            id_pesanan: req.param("id_pesanan"),
+            tgl_bayar: req.param("tgl_bayar"),
+          });
+        } else {
+          req.flash("msg_info", "Create pembayaran success");
+          res.redirect("/buah");
+        }
+      });
+    });
+  } else {
+    console.log(errors);
+    errors_detail = "<p>Sory there are error</p><ul>";
+    for (i in errors) {
+      error = errors[i];
+      errors_detail += "<li>" + error.msg + "</li>";
+    }
+    errors_detail += "</ul>";
+    req.flash("msg_error", errors_detail);
+    res.render("buah/pesan", {
+      id_customer: req.param("id_customer"),
+      id_buah: req.param("id_buah"),
+    });
+  }
+});
+router.post("/pembayaran/add", function (req, res, next) {
+  req.assert("id_pembayaran", "Please fill the name").notEmpty();
+  var errors = req.validationErrors();
+  if (!errors) {
+    v_id_pesanan = req?.sanitize("id_pesanan")?.escape()?.trim();
+    v_tgl_bayar = req?.sanitize("tgl_bayar")?.escape()?.trim();
+
+    var buah = {
+      id_pesanan: v_id_pesanan,
+      tgl_bayar: v_tgl_bayar,
+    };
+
+    var insert_sql = "INSERT INTO pembayaran SET ?";
+
+    req.getConnection(function (err, connection) {
+      var query = connection.query(insert_sql, buah, function (err, result) {
+        if (err) {
+          var errors_detail = ("Error Insert : %s ", err);
+          req.flash("msg_error", errors_detail);
+          res.render("buah/pesan", {
+            id_pesanan: req.param("id_pesanan"),
+            tgl_bayar: req.param("tgl_bayar"),
+          });
+        } else {
+          req.flash("msg_info", "Create buah success");
+          res.redirect("/buah");
+        }
+      });
+    });
+  } else {
+    console.log(errors);
+    errors_detail = "<p>Sory there are error</p><ul>";
+    for (i in errors) {
+      error = errors[i];
+      errors_detail += "<li>" + error.msg + "</li>";
+    }
+    errors_detail += "</ul>";
+    req.flash("msg_error", errors_detail);
+    res.render("pesanan/pembayaran", {
+      id_pesanan: req.param("id_pesanan"),
+      tgl_bayar: req.param("tgl_bayar"),
+    });
+  }
+});
+
+router.get("/pembayaran/pesanan/(:id_pesanan)", function (req, res, next) {
+  req.getConnection(function (err, connection) {
+    var query = connection.query(
+      "SELECT * FROM pesanan where id_pesanan=" + req.params.id_pesanan,
+      function (err, rows) {
+        if (err) {
+          var errornya = ("Error Selecting : %s ", err);
+          req.flash("msg_error", errors_detail);
+          res.redirect("/pesanan");
+        } else {
+          if (rows.length <= 0) {
+            req.flash("msg_error", "buah can't be find!");
+            res.redirect("/pesanan");
+          } else {
+            console.log(rows);
+            res.render("pesanan/pembayaran", { title: "pesanan ", data: rows[0] });
+          }
+        }
+      }
+    );
+  });
 });
 
 router.get("/pesan/(:id)", function (req, res, next) {

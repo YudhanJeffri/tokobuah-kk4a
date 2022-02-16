@@ -2,7 +2,7 @@ extends ../layout/base
 block content 
     section.content-header 
         h1 
-            | Blank Page
+            | Pembayaran Page
             small it all starts here
         ol.breadcrumb 
             li 
@@ -20,7 +20,7 @@ block content
                         i.fa.fa-minus
 
             .box-body
-                form(role='form' method='post' action='/buah/pesan/add')
+                form(role='form' method='post' action='/buah/pembayaran/add')
                     .row
 
                         .col-xs-6
@@ -34,27 +34,14 @@ block content
                                             | Alert! 
                                         | !{messages.msg_error}
                                 .form-group
-                                        for row, index in data 
-                                            li Id Customer : #{row.id}
-                                            td #{row.name}
+                                    li Id Pesanan : #{data.id_pesanan}
                                     label
-                                        | Id Customer
-                                    input(type='text' name='id_customer' placeholder='Enter Id Customer').form-control
-                                .form-group
-
-                                        li Id Buah : #{databuah.id}
-                                    label
-                                        | Id Buah
-                                    input(type='text' name='id_buah' placeholder='Enter Id Buah').form-control
-
+                                        | Id Pesanan
+                                    input(type='text' name='id_pesanan' value='#{data.id_pesanan}' placeholder='Enter Id Pesanan').form-control
                                 .form-group
                                     label
-                                        | qty
-                                    input(type='text' value='#{qty}' name='qty' placeholder='Jumlah buah yang ingin di pesan').form-control
-                                .form-group
-                                    label
-                                        | Tanggal Pesan
-                                    input(type='date' name='tgl_pesan' placeholder='Enter deskripsi').form-control
+                                        | Tanggal Bayar 
+                                    input(type='date' name='tgl_bayar' placeholder='Enter bayar').form-control
                             .box-footer
                                 button(type='submit').btn.btn-primary
                                     | Submit
