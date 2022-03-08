@@ -16,6 +16,7 @@ var methodOverride = require("method-override");
 var connection = require("express-myconnection");
 var mysql = require("mysql");
 var app = express();
+const port = process.env.PORT || 5000
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
@@ -78,4 +79,6 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
+// Listen on port 5000
+app.listen(port, () => console.log(`Listening on port ${port}`))
 module.exports = app;
